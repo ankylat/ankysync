@@ -198,3 +198,16 @@ model AnkyWriter {
     flagged          Boolean?
     createdAt         DateTime @default(now())
 }
+
+model ReplyFromAnky {
+    id                    Int         @id  @unique
+    rootCastText          String?
+    scheduledAt           DateTime @default(now())
+    replyingToFid         Int?
+    replyingToUsername    String?
+    replyingToCastHash    String?
+    timeOfReply           DateTime?
+    replyText             String?
+    replyReasoning        String?
+    replyCastHash         String?
+}

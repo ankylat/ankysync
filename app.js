@@ -8,6 +8,7 @@ const { ethers } = require("ethers");
 const cors = require("cors");
 const fs = require("fs").promises;
 const path = require("path");
+const axios = require("axios");
 const bodyParser = require("body-parser");
 const prisma = require("./lib/prismaClient");
 const { scheduleReminders, sendCast } = require("./lib/writingReminder");
@@ -20,6 +21,7 @@ const {
   theElectronicMadness,
   closeVotingWindowAndOpenMint,
 } = require("./lib/ankys");
+const { replyToThisCast } = require('./lib/anky');
 const rateLimit = require("express-rate-limit");
 
 // Internal Modules
@@ -69,11 +71,44 @@ app.use("/user", userRoutes);
 schedule.scheduleJob("*/5 * * * *", checkAndUpdateGeneratedAnkys);
 schedule.scheduleJob("*/5 * * * *", closeVotingWindowAndOpenMint);
 schedule.scheduleJob("*/5 * * * *", closeMintingWindowForAnkys);
+schedule.scheduleJob("*/20 * * * *", findARandomCastToReply);
 
 // closeVotingWindowAndOpenMint();
 // closeMintingWindowForAnkys();
 // checkAndUpdateGeneratedAnkys();
 // closeVotingWindowAndOpenMint();
+
+async function findARandomCastToReply () {
+  try {
+    console.log("finding a random cast to reply");
+    const viewer_fid = 18350;
+    const fid = Math.floor(600000 * Math.random());
+    const response = await axios.get(
+      `https://api.neynar.com/v2/farcaster/feed/following?fid=${fid}&viewer_fid=${viewer_fid}&with_recasts=true&limit=22`,
+      {
+        headers: {
+          api_key: process.env.NEYNAR_API_KEY,
+        },
+      }
+    );
+    const feedCasts = response.data.casts;
+    let chosenCast;
+    for (cast of feedCasts){
+      if (chosenCast) {
+        if(cast.text.length > chosenCast.text.length){
+          chosenCast = cast;
+        }
+      } else {
+        chosenCast = cast;
+      }
+    }
+    replyToThisCast(chosenCast);
+  } catch (error) {
+    console.log("there was an error on the find a random cast to reply function", error);
+  }
+}
+findARandomCastToReply();
+
 
 const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {

@@ -351,6 +351,7 @@ router.post("/api/reaction", async (req, res) => {
 
 
 router.post("/api/cast/anon", async (req, res) => {
+  console.log("inside the cast anon api route", req.body)
   const { text, parent, embeds, cid, manaEarned, channelId, time } = req.body;
   let fullCast;
   let castOptions = {
@@ -372,7 +373,6 @@ router.post("/api/cast/anon", async (req, res) => {
   }
 
   try {
-    console.log("just before casting anon", castOptions)
     const response = await axios.post(
       "https://api.neynar.com/v2/farcaster/cast",
       castOptions,
