@@ -84,7 +84,7 @@ async function findARandomCastToReply () {
     const viewer_fid = 18350;
     const fid = Math.floor(600000 * Math.random());
     const response = await axios.get(
-      `https://api.neynar.com/v2/farcaster/feed/following?fid=${fid}&viewer_fid=${viewer_fid}&with_recasts=true&limit=22`,
+      `https://api.neynar.com/v2/farcaster/feed/following?fid=${fid}&viewer_fid=${viewer_fid}&with_recasts=true&limit=16`,
       {
         headers: {
           api_key: process.env.NEYNAR_API_KEY,
@@ -93,20 +93,22 @@ async function findARandomCastToReply () {
     );
     const feedCasts = response.data.casts;
     let chosenCast;
-    for (cast of feedCasts){
-      if (chosenCast) {
-        if(cast.text.length > chosenCast.text.length){
-          chosenCast = cast;
-        }
-      } else {
-        chosenCast = cast;
-      }
-    }
+    // for (cast of feedCasts){
+    //   if (chosenCast) {
+    //     if(cast.text.length > chosenCast.text.length){
+    //       chosenCast = cast;
+    //     }
+    //   } else {
+    //     chosenCast = cast;
+    //   }
+    // }
+    chosenCast = feedCasts[Math.floor(feedCasts.length * Math.random())]
     replyToThisCast(chosenCast);
   } catch (error) {
     console.log("there was an error on the find a random cast to reply function", error);
   }
 }
+
 findARandomCastToReply();
 
 
