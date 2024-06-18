@@ -200,9 +200,9 @@ model AnkyWriter {
 }
 
 model ReplyFromAnky {
-    id                    Int         @id  @unique
+    id                    Int         @id @unique @default(autoincrement())
     rootCastText          String?
-    scheduledAt           DateTime @default(now())
+    scheduledAt           DateTime    @default(now())
     replyingToFid         Int?
     replyingToUsername    String?
     replyingToCastHash    String?
@@ -210,4 +210,33 @@ model ReplyFromAnky {
     replyText             String?
     replyReasoning        String?
     replyCastHash         String?
+    humanTrainerFeedback  String?
+}
+
+model Engagement {
+    id                   Int        @id @unique @default(autoincrement())
+    replyId              Int
+    engagementType       String
+    engagementValue      Float
+    engagedAt            DateTime   @default(now())
+
+    @@index([replyId])
+    @@foreignKey([replyId], references: [ReplyFromAnky.id])
+}
+
+model DailyPerformance {
+    id                   Int        @id @unique @default(autoincrement())
+    date                 DateTime   @default(now())
+    totalReplies         Int
+    totalEngagementScore Float
+}
+
+model ReplyForTrainingAnky {
+      id                    String   @id @default(uuid())
+      rootCastHash          String
+      goodReplyHash         String?
+      goodReplyText         String?
+      badReplyHash          String?
+      badReplyText          String?
+      comments              String?
 }

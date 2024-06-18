@@ -93,16 +93,9 @@ async function findARandomCastToReply () {
     );
     const feedCasts = response.data.casts;
     let chosenCast;
-    // for (cast of feedCasts){
-    //   if (chosenCast) {
-    //     if(cast.text.length > chosenCast.text.length){
-    //       chosenCast = cast;
-    //     }
-    //   } else {
-    //     chosenCast = cast;
-    //   }
-    // }
+
     chosenCast = feedCasts[Math.floor(feedCasts.length * Math.random())]
+    console.log('the chosen cast is', chosenCast)
     replyToThisCast(chosenCast);
   } catch (error) {
     console.log("there was an error on the find a random cast to reply function", error);
@@ -110,7 +103,6 @@ async function findARandomCastToReply () {
 }
 
 findARandomCastToReply();
-
 
 const shuffleArray = (array) => {
   for (let i = array.length - 1; i > 0; i--) {

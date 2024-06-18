@@ -448,6 +448,7 @@ router.post("/api/cast/replies/:hash", async (req, res) => {
 
 router.post("/api/get-cast", async (req, res) => {
   try {
+    console.log("IN HEREEEEE")
     const { url } = req.body;
     console.log("the url here is: ", url);
     if (!url)
