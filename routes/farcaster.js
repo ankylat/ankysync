@@ -352,7 +352,7 @@ router.post("/api/reaction", async (req, res) => {
 
 router.post("/api/cast/anon", async (req, res) => {
   console.log("inside the cast anon api route", req.body)
-  const { text, parent, embeds, cid, manaEarned, channelId, time } = req.body;
+  const { text, parent, embeds, cid, manaEarned, channelId, time, bloodId } = req.body;
   let fullCast;
   let castOptions = {
     text: text,
@@ -371,6 +371,10 @@ router.post("/api/cast/anon", async (req, res) => {
     fullCast = await getFullCastFromWarpcasterUrl(parent);
     castOptions.parent = fullCast.hash;
   }
+  if(bloodId && bloodId.length > 2) {
+    const bloodHash = "0x509090c707ce7dce832532d814a10712d3efef6d"
+    castOptions.parent = bloodHash
+  }
 
   try {
     const response = await axios.post(
@@ -382,15 +386,29 @@ router.post("/api/cast/anon", async (req, res) => {
         },
       }
     );
-    const prismaResponse = await prisma.castWrapper.create({
-      data: {
-        time: time,
-        cid: cid,
-        manaEarned: manaEarned,
-        castHash: response.data.cast.hash,
-        castAuthor: response.data.cast.author.username,
-      },
-    });
+    console.log("the response from casting is ", response)
+    if ( bloodId ) {
+      const prismaResponse = await prisma.bringTheBlood.update({
+        where: {
+          id: bloodId
+        }, data: {
+          cid:cid,
+          time: time
+        }
+      })
+      console.log("the blood was updated, now DM the user")
+    }
+
+
+    // const prismaResponse = await prisma.castWrapper.create({
+    //   data: {
+    //     time: time,
+    //     cid: cid,
+    //     manaEarned: manaEarned,
+    //     castHash: response.data.cast.hash,
+    //     castAuthor: response.data.cast.author.username,
+    //   },
+    // });
 
     res.json({ cast: response.data.cast });
   } catch (error) {

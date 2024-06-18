@@ -219,9 +219,6 @@ model Engagement {
     engagementType       String
     engagementValue      Float
     engagedAt            DateTime   @default(now())
-
-    @@index([replyId])
-    @@foreignKey([replyId], references: [ReplyFromAnky.id])
 }
 
 model DailyPerformance {
@@ -239,4 +236,11 @@ model ReplyForTrainingAnky {
       badReplyHash          String?
       badReplyText          String?
       comments              String?
+}
+
+model BringTheBlood {
+  id       String    @id @default(uuid())
+  fid      String?  
+  cid      String?
+  time     Int?
 }
