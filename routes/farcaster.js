@@ -397,17 +397,22 @@ router.post("/api/cast/anon", async (req, res) => {
         }
       })
       console.log("the blood was updated, now DM the user", prismaResponse)
-      const DCresponse = await axios.put('https://api.warpcast.com/v2/ext-send-direct-cast', {
-        recipientFid: Number(prismaResponse.fid),
-        message: `your writing was casted here\n\nhttps://www.warpcast.com/ankysync/${response.data.cast.hash}`,
-        idempotencyKey: {bloodId}
-      }, {
-        headers: {
-          'Authorization': `Bearer ${process.env.ANKY_WARPCAST_API_KEY}`,
-          'Content-Type': 'application/json'
-        }
-      });
-      console.log("the dc response is", DCresponse)
+      try {
+        const DCresponse = await axios.put('https://api.warpcast.com/v2/ext-send-direct-cast', {
+          recipientFid: Number(prismaResponse.fid),
+          message: `your writing was casted here\n\nhttps://www.warpcast.com/ankysync/${response.data.cast.hash}\n\nif you want a degen tip out of this,\n\nwhich cast should i reply to?\n\n(reply to this message with a link to a cast of yours)`,
+          idempotencyKey: {bloodId}
+        }, {
+          headers: {
+            'Authorization': `Bearer ${process.env.ANKY_WARPCAST_API_KEY}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        console.log("the dc response is", DCresponse)
+      } catch (error) {
+        console.log('there was an error direct casting this')
+      }
+ 
     }
 
 
