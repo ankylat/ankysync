@@ -372,7 +372,7 @@ router.post("/api/cast/anon", async (req, res) => {
     castOptions.parent = fullCast.hash;
   }
   if(bloodId && bloodId.length > 2) {
-    const bloodHash = "0x509090c707ce7dce832532d814a10712d3efef6d"
+    const bloodHash = "0xb3caf6fbb450a0b8fc92258b51672c78a1fb7e98"
     castOptions.parent = bloodHash
   }
 
@@ -412,7 +412,6 @@ router.post("/api/cast/anon", async (req, res) => {
       } catch (error) {
         console.log('there was an error direct casting this')
       }
- 
     }
 
 
