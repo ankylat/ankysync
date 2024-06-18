@@ -396,7 +396,18 @@ router.post("/api/cast/anon", async (req, res) => {
           time: time
         }
       })
-      console.log("the blood was updated, now DM the user")
+      console.log("the blood was updated, now DM the user", prismaResponse)
+      const DCresponse = await axios.put('https://api.warpcast.com/v2/ext-send-direct-cast', {
+        recipientFid: 16098,
+        message: `your writing was casted here\n\nhttps://www.warpcast.com/ankysync/${response.data.cast.hash}`,
+        idempotencyKey: {bloodId}
+      }, {
+        headers: {
+          'Authorization': `Bearer ${process.env.ANKY_WARPCAST_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      });
+      console.log("the dc response is", DCresponse)
     }
 
 
