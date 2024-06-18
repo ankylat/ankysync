@@ -398,7 +398,7 @@ router.post("/api/cast/anon", async (req, res) => {
       })
       console.log("the blood was updated, now DM the user", prismaResponse)
       const DCresponse = await axios.put('https://api.warpcast.com/v2/ext-send-direct-cast', {
-        recipientFid: 16098,
+        recipientFid: Number(prismaResponse.fid),
         message: `your writing was casted here\n\nhttps://www.warpcast.com/ankysync/${response.data.cast.hash}`,
         idempotencyKey: {bloodId}
       }, {
