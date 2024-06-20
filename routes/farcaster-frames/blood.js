@@ -25,9 +25,9 @@ router.get("/", async (req, res) => {
     <head>
       <title>anky mint</title>
       <meta property="og:title" content="anky mint">
-      <meta property="og:image" content="https://github.com/jpfraneto/images/blob/main/life.jpeg?raw=true">
+      <meta property="og:image" content="https://raw.githubusercontent.com/jpfraneto/images/main/life.jpeg">
       <meta name="fc:frame" content="vNext">
-      <meta name="fc:frame:image" content="https://github.com/jpfraneto/images/blob/main/life.jpeg?raw=true">
+      <meta name="fc:frame:image" content="https://raw.githubusercontent.com/jpfraneto/images/main/life.jpeg">
       <meta name="fc:frame:post_url" content="${fullUrl}/farcaster-frames/blood">
       <meta name="fc:frame:button:1" content="im ready to feel">
     </head>
@@ -56,8 +56,8 @@ router.post("/", async (req, res) => {
     <head>
       <title>blood</title>
       <meta property="og:title" content="blood">
-      <meta property="og:image" content="https://github.com/jpfraneto/images/blob/main/life.jpeg?raw=true">
-      <meta name="fc:frame:image" content="https://github.com/jpfraneto/images/blob/main/life.jpeg?raw=true">
+      <meta property="og:image" content="https://raw.githubusercontent.com/jpfraneto/images/main/life.jpeg">
+      <meta name="fc:frame:image" content="https://raw.githubusercontent.com/jpfraneto/images/main/life.jpeg">
       <meta name="fc:frame" content="vNext">
       <meta name="fc:frame:button:1" content="im ready to write">
       <meta name="fc:frame:button:1:action" content="link">   
