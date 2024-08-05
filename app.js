@@ -209,7 +209,7 @@ app.post("/cast-anon-writing", async (req, res) => {
     // For example: await prisma.anonymousCast.create({ data: { cid, time, manaEarned, ...castResponse.data } });
 
     res.status(201).json({ 
-      cast: castResponse.data.cast
+      cast: castResponse.data.cast, cid
     });
   } catch (error) {
     console.error('Error creating anonymous cast:', error);
