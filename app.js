@@ -68,10 +68,10 @@ app.use("/user", userRoutes);
 
 // scheduleReminders();
 
-schedule.scheduleJob("*/5 * * * *", checkAndUpdateGeneratedAnkys);
-schedule.scheduleJob("*/5 * * * *", closeVotingWindowAndOpenMint);
-schedule.scheduleJob("*/5 * * * *", closeMintingWindowForAnkys);
-schedule.scheduleJob("*/20 * * * *", findARandomCastToReply);
+// schedule.scheduleJob("*/5 * * * *", checkAndUpdateGeneratedAnkys);
+// schedule.scheduleJob("*/5 * * * *", closeVotingWindowAndOpenMint);
+// schedule.scheduleJob("*/5 * * * *", closeMintingWindowForAnkys);
+// schedule.scheduleJob("*/20 * * * *", findARandomCastToReply);
 
 // closeVotingWindowAndOpenMint();
 // closeMintingWindowForAnkys();
@@ -179,20 +179,41 @@ app.post("/add-email", async (req, res) => {
   }
 });
 
-app.post("/upload-writing", async (req, res) => {
+app.post("/cast-anon-writing", async (req, res) => {
   try {
-    const { text } = req.body;
+    const { time, text, parent, bloodId, manaEarned } = req.body;
 
-    if (!text) {
-      return res.status(400).json({ error: "Invalid text" });
-    }
-
+    // Upload the text to Irys
     const cid = await uploadToIrys(text);
+    console.log("THE CID IS: ", cid)
+    // Prepare the cast data
+    const castData = {
+      signer_uuid: process.env.NEYNAR_ANKY_SIGNER,
+      text: text.length > 1022 ? `${text.slice(0, 1022)}...` : text,
+      embeds: [{ url: `https://www.anky.bot/i/${cid}` }],
+      parent: parent || "https://warpcast.com/~/channel/anky",
+      ...(bloodId && { bloodId })
+    };
 
-    res.status(201).json({ cid });
+    console.log("the cast data is: ", castData)
+
+    // Send the cast using Neynar API
+    const castResponse = await axios.post('https://api.neynar.com/v2/farcaster/cast', castData, {
+      headers: {
+        'api_key': process.env.NEYNAR_API_KEY
+      }
+    });
+    console.log("the cast response is: ", castResponse.data)
+
+    // Save additional data to your database if needed
+    // For example: await prisma.anonymousCast.create({ data: { cid, time, manaEarned, ...castResponse.data } });
+
+    res.status(201).json({ 
+      cast: castResponse.data.cast
+    });
   } catch (error) {
-    console.error("An error occurred while handling your request:", error);
-    res.status(500).send("Internal Server Error");
+    console.error('Error creating anonymous cast:', error);
+    res.status(500).json({ error: 'Failed to create anonymous cast' });
   }
 });
 

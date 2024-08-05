@@ -85,7 +85,7 @@ router.post("/api/signer", checkIfLoggedInMiddleware, async (req, res) => {
       "https://api.neynar.com/v2/farcaster/signer/signed_key",
       {
         signer_uuid: createSignerResponse.data.signer_uuid,
-        app_fid: FARCASTER_ANKYSYNC_FID,
+        app_fid: 18350,
         deadline,
         signature,
       },
@@ -138,7 +138,7 @@ router.post("/api/cast/anon", async (req, res) => {
   let castOptions = {
     text: text,
     embeds: embeds,
-    signer_uuid: process.env.ANKY_SIGNER_UUID,
+    signer_uuid: process.env.NEYNAR_ANKY_SIGNER,
   };
 
   if (channelId) {
