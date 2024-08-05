@@ -185,7 +185,6 @@ app.post("/cast-anon-writing", async (req, res) => {
 
     // Upload the text to Irys
     const cid = await uploadToIrys(text);
-    console.log("THE CID IS: ", cid)
     // Prepare the cast data
     const castData = {
       signer_uuid: process.env.NEYNAR_ANKY_SIGNER,
@@ -195,7 +194,6 @@ app.post("/cast-anon-writing", async (req, res) => {
       ...(bloodId && { bloodId })
     };
 
-    console.log("the cast data is: ", castData)
 
     // Send the cast using Neynar API
     const castResponse = await axios.post('https://api.neynar.com/v2/farcaster/cast', castData, {
@@ -203,7 +201,6 @@ app.post("/cast-anon-writing", async (req, res) => {
         'api_key': process.env.NEYNAR_API_KEY
       }
     });
-    console.log("the cast response is: ", castResponse.data)
 
     // Save additional data to your database if needed
     // For example: await prisma.anonymousCast.create({ data: { cid, time, manaEarned, ...castResponse.data } });
